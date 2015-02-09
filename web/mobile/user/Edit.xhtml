@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <pm:page id="UserEditPage">
+        <pm:header title="#{myBundle.EditUserTitle}">
+            <p:button styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" outcome="pm:UserListPage"/>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="UserEditForm">
+
+                <h:panelGroup id="display">
+                    <p:outputPanel rendered="#{userController.selected != null}">
+
+                        <pm:field>
+                            <h:outputLabel value="#{myBundle.EditUserLabel_id}" for="id" />
+                            <h:outputText id="id" value="#{userController.selected.id}" />
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditUserLabel_userName}" for="userName" />
+                            <p:inputText id="userName" value="#{userController.selected.userName}" title="#{myBundle.EditUserTitle_userName}" required="true" requiredMessage="#{myBundle.EditUserRequiredMessage_userName}" size="15" maxlength="15"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditUserLabel_password}" for="password" />
+                            <p:inputText id="password" value="#{userController.selected.password}" title="#{myBundle.EditUserTitle_password}" required="true" requiredMessage="#{myBundle.EditUserRequiredMessage_password}" size="15" maxlength="15"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditUserLabel_name}" for="name" />
+                            <p:inputText id="name" value="#{userController.selected.name}" title="#{myBundle.EditUserTitle_name}" size="50" maxlength="50"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditUserLabel_roleID}" for="roleID" />
+                            <p:selectOneMenu id="roleID" value="#{userController.selected.roleID}" required="true" requiredMessage="#{myBundle.EditUserRequiredMessage_roleID}" converter="roleConverter">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{roleController.items}"
+                                               var="roleIDItem"
+                                               itemValue="#{roleIDItem}"
+                                               itemLabel="#{roleIDItem.description.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+                    </p:outputPanel>
+                    <p:commandButton actionListener="#{userController.save}" value="#{myBundle.Save}" update="display,:UserListPage:UserListForm:datalist,:growl" action="pm:UserListPage"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

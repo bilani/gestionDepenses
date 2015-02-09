@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TransactionCreateDlg" widgetVar="TransactionCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateTransactionTitle}" closeOnEscape="true">
+
+            <h:form id="TransactionCreateForm">
+
+                <h:panelGroup id="display" rendered="#{transactionController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateTransactionLabel_amount}" for="amount" />
+                        <p:inputText id="amount" value="#{transactionController.selected.amount}" title="#{myBundle.CreateTransactionTitle_amount}" required="true" requiredMessage="#{myBundle.CreateTransactionRequiredMessage_amount}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateTransactionLabel_date}" for="date" />
+                        <p:calendar id="date" pattern="MM/dd/yyyy" value="#{transactionController.selected.date}" title="#{myBundle.CreateTransactionTitle_date}" required="true" requiredMessage="#{myBundle.CreateTransactionRequiredMessage_date}" showOn="button"/>
+
+                        <p:outputLabel value="#{myBundle.CreateTransactionLabel_IDuser}" for="IDuser" />
+                        <p:selectOneMenu id="IDuser" value="#{transactionController.selected.IDuser}" required="true" requiredMessage="#{myBundle.CreateTransactionRequiredMessage_IDuser}" converter="userConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{userController.items}"
+                                           var="IDuserItem"
+                                           itemValue="#{IDuserItem}"
+                                           itemLabel="#{IDuserItem.userName.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.CreateTransactionLabel_IDExpens}" for="IDExpens" />
+                        <p:selectOneMenu id="IDExpens" value="#{transactionController.selected.IDExpens}" required="true" requiredMessage="#{myBundle.CreateTransactionRequiredMessage_IDExpens}" converter="expensiveConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{expensiveController.items}"
+                                           var="IDExpensItem"
+                                           itemValue="#{IDExpensItem}"
+                                           itemLabel="#{IDExpensItem.expID.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{transactionController.saveNew}" value="#{myBundle.Save}" update="display,:TransactionListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('TransactionCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('TransactionCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UserCreateDlg" widgetVar="UserCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateUserTitle}" closeOnEscape="true">
+
+            <h:form id="UserCreateForm">
+
+                <h:panelGroup id="display" rendered="#{userController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_userName}" for="userName" />
+                        <p:inputText id="userName" value="#{userController.selected.userName}" title="#{myBundle.CreateUserTitle_userName}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_userName}" size="15" maxlength="15"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_password}" for="password" />
+                        <p:inputText id="password" value="#{userController.selected.password}" title="#{myBundle.CreateUserTitle_password}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_password}" size="15" maxlength="15"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{userController.selected.name}" title="#{myBundle.CreateUserTitle_name}" size="50" maxlength="50"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_roleID}" for="roleID" />
+                        <p:selectOneMenu id="roleID" value="#{userController.selected.roleID}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_roleID}" converter="roleConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{roleController.items}"
+                                           var="roleIDItem"
+                                           itemValue="#{roleIDItem}"
+                                           itemLabel="#{roleIDItem.description.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{userController.saveNew}" value="#{myBundle.Save}" update="display,:UserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('UserCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('UserCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

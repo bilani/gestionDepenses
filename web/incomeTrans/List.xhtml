@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="IncomeTransListForm">
+
+        <p:panel header="#{myBundle.ListIncomeTransTitle}">
+            <p:contextMenu id="IncomeTransDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('IncomeTransListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('IncomeTransListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('IncomeTransListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('IncomeTransListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.IncomeTransMenuItem_IDUser}" icon="ui-icon-search"  actionListener="#{incomeTransController.prepareIDUser}" update=":UserViewForm" oncomplete="PF('UserViewDialog').show()" disabled="#{empty incomeTransController.selected.iDUser}"/>  
+                <p:menuitem value="#{myBundle.IncomeTransMenuItem_IDIncomeType}" icon="ui-icon-search"  actionListener="#{incomeTransController.prepareIDIncomeType}" update=":IncomeTypeViewForm" oncomplete="PF('IncomeTypeViewDialog').show()" disabled="#{empty incomeTransController.selected.iDIncomeType}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{incomeTransController.items}"
+                         var="item"
+                         rowKey="#{item.IDTrans}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{incomeTransController.selected}">
+
+                <p:ajax event="rowSelect"   update=":IncomeTransListForm:createButton :IncomeTransListForm:viewButton :IncomeTransListForm:editButton :IncomeTransListForm:deleteButton :IncomeTransListForm:IncomeTransDataTableContextMenu" listener="#{incomeTransController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":IncomeTransListForm:createButton :IncomeTransListForm:viewButton :IncomeTransListForm:editButton :IncomeTransListForm:deleteButton :IncomeTransListForm:IncomeTransDataTableContextMenu" listener="#{incomeTransController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :IncomeTransListForm:createButton :IncomeTransListForm:viewButton :IncomeTransListForm:editButton :IncomeTransListForm:deleteButton" listener="#{incomeTransController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('IncomeTransListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.IDTrans}" filterBy="#{item.IDTrans}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTransTitle_IDTrans}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDTrans}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.amount}" filterBy="#{item.amount}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTransTitle_amount}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.amount}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.date}" filterBy="#{item.date}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTransTitle_date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.date}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column sortBy="#{item.IDUser.userName}" filterBy="#{item.IDUser.userName}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTransTitle_IDUser}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDUser.userName}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.IDIncomeType.IDIncome}" filterBy="#{item.IDIncomeType.IDIncome}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTransTitle_IDIncomeType}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDIncomeType.IDIncome}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{incomeTransController.prepareCreate}" update=":IncomeTransCreateForm" oncomplete="PF('IncomeTransCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":IncomeTransViewForm" oncomplete="PF('IncomeTransViewDialog').show()" disabled="#{empty incomeTransController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":IncomeTransEditForm" oncomplete="PF('IncomeTransEditDialog').show()" disabled="#{empty incomeTransController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{incomeTransController.delete}" update=":growl,datalist" disabled="#{empty incomeTransController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

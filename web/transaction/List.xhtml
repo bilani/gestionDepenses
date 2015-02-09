@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="TransactionListForm">
+
+        <p:panel header="#{myBundle.ListTransactionTitle}">
+            <p:contextMenu id="TransactionDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('TransactionListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('TransactionListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('TransactionListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('TransactionListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.TransactionMenuItem_IDuser}" icon="ui-icon-search"  actionListener="#{transactionController.prepareIDuser}" update=":UserViewForm" oncomplete="PF('UserViewDialog').show()" disabled="#{empty transactionController.selected.iDuser}"/>  
+                <p:menuitem value="#{myBundle.TransactionMenuItem_IDExpens}" icon="ui-icon-search"  actionListener="#{transactionController.prepareIDExpens}" update=":ExpensiveViewForm" oncomplete="PF('ExpensiveViewDialog').show()" disabled="#{empty transactionController.selected.iDExpens}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{transactionController.items}"
+                         var="item"
+                         rowKey="#{item.IDTrans}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{transactionController.selected}">
+
+                <p:ajax event="rowSelect"   update=":TransactionListForm:createButton :TransactionListForm:viewButton :TransactionListForm:editButton :TransactionListForm:deleteButton :TransactionListForm:TransactionDataTableContextMenu" listener="#{transactionController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":TransactionListForm:createButton :TransactionListForm:viewButton :TransactionListForm:editButton :TransactionListForm:deleteButton :TransactionListForm:TransactionDataTableContextMenu" listener="#{transactionController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :TransactionListForm:createButton :TransactionListForm:viewButton :TransactionListForm:editButton :TransactionListForm:deleteButton" listener="#{transactionController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('TransactionListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.IDTrans}" filterBy="#{item.IDTrans}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListTransactionTitle_IDTrans}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDTrans}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.amount}" filterBy="#{item.amount}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListTransactionTitle_amount}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.amount}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.date}" filterBy="#{item.date}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListTransactionTitle_date}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.date}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column sortBy="#{item.IDuser.userName}" filterBy="#{item.IDuser.userName}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListTransactionTitle_IDuser}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDuser.userName}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.IDExpens.expID}" filterBy="#{item.IDExpens.expID}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListTransactionTitle_IDExpens}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDExpens.expID}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{transactionController.prepareCreate}" update=":TransactionCreateForm" oncomplete="PF('TransactionCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":TransactionViewForm" oncomplete="PF('TransactionViewDialog').show()" disabled="#{empty transactionController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":TransactionEditForm" oncomplete="PF('TransactionEditDialog').show()" disabled="#{empty transactionController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{transactionController.delete}" update=":growl,datalist" disabled="#{empty transactionController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="RoleListForm">
+
+        <p:panel header="#{myBundle.ListRoleTitle}">
+            <p:contextMenu id="RoleDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('RoleListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('RoleListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('RoleListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('RoleListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.RoleMenuItem_userCollection}" icon="ui-icon-search"  action="#{roleController.navigateUserCollection}" disabled="#{empty roleController.selected.userCollection}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{roleController.items}"
+                         var="item"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{roleController.selected}">
+
+                <p:ajax event="rowSelect"   update=":RoleListForm:createButton :RoleListForm:viewButton :RoleListForm:editButton :RoleListForm:deleteButton :RoleListForm:RoleDataTableContextMenu" listener="#{roleController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":RoleListForm:createButton :RoleListForm:viewButton :RoleListForm:editButton :RoleListForm:deleteButton :RoleListForm:RoleDataTableContextMenu" listener="#{roleController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :RoleListForm:createButton :RoleListForm:viewButton :RoleListForm:editButton :RoleListForm:deleteButton" listener="#{roleController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('RoleListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRoleTitle_id}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.description}" filterBy="#{item.description}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListRoleTitle_description}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.description}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{roleController.prepareCreate}" update=":RoleCreateForm" oncomplete="PF('RoleCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":RoleViewForm" oncomplete="PF('RoleViewDialog').show()" disabled="#{empty roleController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":RoleEditForm" oncomplete="PF('RoleEditDialog').show()" disabled="#{empty roleController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{roleController.delete}" update=":growl,datalist" disabled="#{empty roleController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

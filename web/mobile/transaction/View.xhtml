@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <pm:page id="TransactionViewPage">
+        <pm:header title="#{myBundle.ViewTransactionTitle}">
+            <p:button styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" outcome="pm:TransactionListPage"/>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="TransactionViewForm">
+
+                <h:panelGroup id="display">
+                    <p:outputPanel rendered="#{transactionController.selected != null}">
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewTransactionLabel_IDTrans}"/>
+                            <h:outputText value="#{transactionController.selected.IDTrans}" title="#{myBundle.ViewTransactionTitle_IDTrans}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewTransactionLabel_amount}"/>
+                            <h:outputText value="#{transactionController.selected.amount}" title="#{myBundle.ViewTransactionTitle_amount}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewTransactionLabel_date}"/>
+                            <h:outputText value="#{transactionController.selected.date}" title="#{myBundle.ViewTransactionTitle_date}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewTransactionLabel_IDuser}"/>
+                            <h:outputText value="#{transactionController.selected.IDuser.userName}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <h:outputText value="#{myBundle.ViewTransactionLabel_IDExpens}"/>
+                            <h:outputText value="#{transactionController.selected.IDExpens.expID}"/>
+                        </pm:field>
+                    </p:outputPanel>
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

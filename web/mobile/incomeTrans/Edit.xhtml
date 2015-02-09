@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <pm:page id="IncomeTransEditPage">
+        <pm:header title="#{myBundle.EditIncomeTransTitle}">
+            <p:button styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" outcome="pm:IncomeTransListPage"/>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="IncomeTransEditForm">
+
+                <h:panelGroup id="display">
+                    <p:outputPanel rendered="#{incomeTransController.selected != null}">
+
+                        <pm:field>
+                            <h:outputLabel value="#{myBundle.EditIncomeTransLabel_IDTrans}" for="IDTrans" />
+                            <h:outputText id="IDTrans" value="#{incomeTransController.selected.IDTrans}" />
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditIncomeTransLabel_amount}" for="amount" />
+                            <p:inputText id="amount" value="#{incomeTransController.selected.amount}" title="#{myBundle.EditIncomeTransTitle_amount}" required="true" requiredMessage="#{myBundle.EditIncomeTransRequiredMessage_amount}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditIncomeTransLabel_date}" for="date" />
+                            <p:calendar id="date" pattern="MM/dd/yyyy" value="#{incomeTransController.selected.date}" title="#{myBundle.EditIncomeTransTitle_date}" required="true" requiredMessage="#{myBundle.EditIncomeTransRequiredMessage_date}" showOn="button"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditIncomeTransLabel_IDUser}" for="IDUser" />
+                            <p:selectOneMenu id="IDUser" value="#{incomeTransController.selected.IDUser}" required="true" requiredMessage="#{myBundle.EditIncomeTransRequiredMessage_IDUser}" converter="userConverter">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{userController.items}"
+                                               var="IDUserItem"
+                                               itemValue="#{IDUserItem}"
+                                               itemLabel="#{IDUserItem.userName.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.EditIncomeTransLabel_IDIncomeType}" for="IDIncomeType" />
+                            <p:selectOneMenu id="IDIncomeType" value="#{incomeTransController.selected.IDIncomeType}" required="true" requiredMessage="#{myBundle.EditIncomeTransRequiredMessage_IDIncomeType}" converter="incomeTypeConverter">
+                                <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                                <f:selectItems value="#{incomeTypeController.items}"
+                                               var="IDIncomeTypeItem"
+                                               itemValue="#{IDIncomeTypeItem}"
+                                               itemLabel="#{IDIncomeTypeItem.IDIncome.toString()}"
+                                               />
+
+                            </p:selectOneMenu>
+                        </pm:field>
+                    </p:outputPanel>
+                    <p:commandButton actionListener="#{incomeTransController.save}" value="#{myBundle.Save}" update="display,:IncomeTransListPage:IncomeTransListForm:datalist,:growl" action="pm:IncomeTransListPage"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

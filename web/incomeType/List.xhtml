@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="IncomeTypeListForm">
+
+        <p:panel header="#{myBundle.ListIncomeTypeTitle}">
+            <p:contextMenu id="IncomeTypeDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('IncomeTypeListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('IncomeTypeListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('IncomeTypeListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('IncomeTypeListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.IncomeTypeMenuItem_incomeTransCollection}" icon="ui-icon-search"  action="#{incomeTypeController.navigateIncomeTransCollection}" disabled="#{empty incomeTypeController.selected.incomeTransCollection}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{incomeTypeController.items}"
+                         var="item"
+                         rowKey="#{item.IDIncome}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{incomeTypeController.selected}">
+
+                <p:ajax event="rowSelect"   update=":IncomeTypeListForm:createButton :IncomeTypeListForm:viewButton :IncomeTypeListForm:editButton :IncomeTypeListForm:deleteButton :IncomeTypeListForm:IncomeTypeDataTableContextMenu" listener="#{incomeTypeController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":IncomeTypeListForm:createButton :IncomeTypeListForm:viewButton :IncomeTypeListForm:editButton :IncomeTypeListForm:deleteButton :IncomeTypeListForm:IncomeTypeDataTableContextMenu" listener="#{incomeTypeController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :IncomeTypeListForm:createButton :IncomeTypeListForm:viewButton :IncomeTypeListForm:editButton :IncomeTypeListForm:deleteButton" listener="#{incomeTypeController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('IncomeTypeListForm:viewButton').click();"/>
+
+                <p:column sortBy="#{item.IDIncome}" filterBy="#{item.IDIncome}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTypeTitle_IDIncome}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.IDIncome}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.incomeDesc}" filterBy="#{item.incomeDesc}">
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTypeTitle_incomeDesc}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.incomeDesc}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{incomeTypeController.prepareCreate}" update=":IncomeTypeCreateForm" oncomplete="PF('IncomeTypeCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":IncomeTypeViewForm" oncomplete="PF('IncomeTypeViewDialog').show()" disabled="#{empty incomeTypeController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":IncomeTypeEditForm" oncomplete="PF('IncomeTypeEditDialog').show()" disabled="#{empty incomeTypeController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{incomeTypeController.delete}" update=":growl,datalist" disabled="#{empty incomeTypeController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

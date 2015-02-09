@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="TransactionViewDlg" widgetVar="TransactionViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewTransactionTitle}" closeOnEscape="true">
+
+            <h:form id="TransactionViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{transactionController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewTransactionLabel_IDTrans}"/>
+                        <h:outputText value="#{transactionController.selected.IDTrans}" title="#{myBundle.ViewTransactionTitle_IDTrans}"/>
+
+                        <h:outputText value="#{myBundle.ViewTransactionLabel_amount}"/>
+                        <h:outputText value="#{transactionController.selected.amount}" title="#{myBundle.ViewTransactionTitle_amount}"/>
+
+                        <h:outputText value="#{myBundle.ViewTransactionLabel_date}"/>
+                        <h:outputText value="#{transactionController.selected.date}" title="#{myBundle.ViewTransactionTitle_date}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+
+                        <h:outputText value="#{myBundle.ViewTransactionLabel_IDuser}"/>
+                        <h:outputText value="#{transactionController.selected.IDuser.userName}"/>
+
+                        <h:outputText value="#{myBundle.ViewTransactionLabel_IDExpens}"/>
+                        <h:outputText value="#{transactionController.selected.IDExpens.expID}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('TransactionViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

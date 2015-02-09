@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <pm:page id="IncomeTypeListPage">
+        <pm:header title="#{myBundle.ListIncomeTypeTitle}">
+            <h:form>
+                <p:button styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Menu}" icon="ui-icon-arrow-l" outcome="/mobile/index"/>
+                <p:commandButton id="createButton" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus" value="#{myBundle.Create}" actionListener="#{incomeTypeController.prepareCreate}" update=":IncomeTypeCreatePage:IncomeTypeCreateForm" action="pm:IncomeTypeCreatePage"/>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="IncomeTypeListForm">
+
+                <p:dataList id="datalist"
+                            value="#{incomeTypeController.items}"
+                            var="item"
+                            paginator="true"
+                            rows="10"
+                            rowsPerPageTemplate="10,20,30,40,50"
+                            pt:data-inset="true">
+
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListIncomeTypeTitle}"/>
+                    </f:facet>
+
+                    <p:commandLink update=":IncomeTypeEditPage:IncomeTypeEditForm" action="pm:IncomeTypeEditPage">
+                        <p>
+
+
+
+                            <h:outputText value="#{item.IDIncome}"/>
+
+
+
+                            ,&nbsp;
+                            <h:outputText value="#{item.incomeDesc}"/>
+
+
+                        </p>
+                        <f:setPropertyActionListener value="#{item}" target="#{incomeTypeController.selected}" />
+                    </p:commandLink>
+
+                    <f:facet name="footer">
+                        <h:outputText value="#{myBundle.ListIncomeTypeTitle}"/>
+                    </f:facet>
+
+                </p:dataList>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>

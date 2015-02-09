@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <pm:page id="ExpensiveCreatePage">
+        <pm:header title="#{myBundle.CreateExpensiveTitle}">
+            <p:button styleClass="ui-btn-left ui-btn-inline" value="#{myBundle.Cancel}" icon="ui-icon-arrow-l" outcome="pm:ExpensiveListPage"/>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="ExpensiveCreateForm">
+
+                <h:panelGroup id="display" rendered="#{expensiveController.selected != null}">
+                    <p:outputPanel>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreateExpensiveLabel_expID}" for="expID" />
+                            <p:inputText id="expID" value="#{expensiveController.selected.expID}" title="#{myBundle.CreateExpensiveTitle_expID}" required="true" requiredMessage="#{myBundle.CreateExpensiveRequiredMessage_expID}"/>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel value="#{myBundle.CreateExpensiveLabel_expDesc}" for="expDesc" />
+                            <p:inputText id="expDesc" value="#{expensiveController.selected.expDesc}" title="#{myBundle.CreateExpensiveTitle_expDesc}" required="true" requiredMessage="#{myBundle.CreateExpensiveRequiredMessage_expDesc}" size="50" maxlength="50"/>
+                        </pm:field>
+                    </p:outputPanel>
+                    <p:commandButton actionListener="#{expensiveController.saveNew}" value="#{myBundle.Save}" update="display,:ExpensiveListPage:ExpensiveListForm:datalist,:growl" action="pm:ExpensiveListPage"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>
