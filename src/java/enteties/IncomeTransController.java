@@ -6,6 +6,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @ManagedBean(name = "incomeTransController")
 @ViewScoped
@@ -15,7 +16,8 @@ public class IncomeTransController extends AbstractController<IncomeTrans> {
     private IncomeTransFacade ejbFacade;
     private UserController iDUserController;
     private IncomeTypeController iDIncomeTypeController;
-
+ 
+ 
     /**
      * Initialize the concrete IncomeTrans controller bean. The
      * AbstractController requires the EJB Facade object for most operations.
@@ -33,6 +35,8 @@ public class IncomeTransController extends AbstractController<IncomeTrans> {
         iDIncomeTypeController = context.getApplication().evaluateExpressionGet(context, "#{incomeTypeController}", IncomeTypeController.class);
     }
 
+   
+    
     public IncomeTransController() {
         // Inform the Abstract parent controller of the concrete IncomeTrans?cap_first Entity
         super(IncomeTrans.class);

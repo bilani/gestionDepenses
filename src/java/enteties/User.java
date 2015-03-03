@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
+import enteties.MD5;
 /**
  *
  * @author Mohamad Bilani
@@ -47,15 +47,15 @@ public class User implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 15)
+    @Size(min = 1, max = 50)
     @Column(name = "User_Name")
     private String userName;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 15)
+    @Size(min = 1, max = 50)
     @Column(name = "Password")
     private String password;
-    @Size(max = 50)
+    @Size(max = 250)
     @Column(name = "Name")
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "iDUser")
@@ -76,7 +76,7 @@ public class User implements Serializable {
     public User(Integer id, String userName, String password) {
         this.id = id;
         this.userName = userName;
-        this.password = password;
+        this.password = MD5.getHashString( password);
     }
 
     public Integer getId() {
@@ -100,7 +100,7 @@ public class User implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = MD5.getHashString(password) ;
     }
 
     public String getName() {

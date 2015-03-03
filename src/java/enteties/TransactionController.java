@@ -1,5 +1,6 @@
 package enteties;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -15,6 +16,7 @@ public class TransactionController extends AbstractController<Transaction> {
     private TransactionFacade ejbFacade;
     private UserController iDuserController;
     private ExpensiveController iDExpensController;
+    private List<Object[]> listbyc;
 
     /**
      * Initialize the concrete Transaction controller bean. The
@@ -69,5 +71,13 @@ public class TransactionController extends AbstractController<Transaction> {
         if (this.getSelected() != null && iDExpensController.getSelected() == null) {
             iDExpensController.setSelected(this.getSelected().getIDExpens());
         }
+    }
+     public List<Object[]> getListbyc() {
+        listbyc = ejbFacade.bycate();
+        return listbyc;
+    }
+    
+        public void setListbyc(List<Object[]> listbyc) {
+        this.listbyc = listbyc;
     }
 }

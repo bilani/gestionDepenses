@@ -5,6 +5,7 @@
  */
 package enteties;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,5 +27,8 @@ public class TransactionFacade extends AbstractFacade<Transaction> {
     public TransactionFacade() {
         super(Transaction.class);
     }
-    
+   public List<Object[]> bycate(){
+               System.out.println("hi");
+              return (List<Object[]>) em.createQuery("SELECT * FROM user u").getResultList();
+      }  
 }
